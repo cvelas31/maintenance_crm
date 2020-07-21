@@ -16,6 +16,11 @@
 ## Comandos Django
 url/admin
 
+### Create Admin
+ ```bash
+ python manage.py createsuperuser
+ ```
+
 ### Ejecución del programa
  ```bash
  python manage.py runserver

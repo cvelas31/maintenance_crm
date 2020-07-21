@@ -15,7 +15,7 @@ class Customer(models.Model):
         return self.name
 
 
-class EquipmentTag(models.Model):
+class TagEquipment(models.Model):
     name = models.CharField(max_length=200, null=True)
 
     def __str__(self):
@@ -32,14 +32,13 @@ class Equipment(models.Model):
     category = models.CharField(max_length=200, null=True, choices=CATEGORY)
     description = models.CharField(max_length=200, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-    equipment_tags = models.ManyToManyField(EquipmentTag)
+    tags = models.ManyToManyField(TagEquipment)
 
     def __str__(self):
         return self.name
 
-class OrderTag(models.Model):
+class TagOrder(models.Model):
     name = models.CharField(max_length=200, null=True)
-
     def __str__(self):
         return self.name
 
@@ -55,7 +54,7 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     status = models.CharField(max_length=200, null=True, choices=STATUS)
     descripción = models.CharField(max_length=1000, null=True)
-    order_tags = models.ManyToManyField(OrderTag)
+    order_tags = models.ManyToManyField(TagOrder)
     #imagen = models.ImageField(default="profilepic.jpg", null=True, blank=True)
     #video = models.ImageField(default="profilepic.jpg", null=True, blank=True)
 
