@@ -1,7 +1,40 @@
 # Programa control mantenimiento
 
-## Esquema
+# Usuario
+## Admin
+- admin: farmaplast2020
 
+# Otros
+- producción1: ejemplo1
+- mantenimiento1: ejemplo1
+
+## Nomenclatura:
+- Customer: Persona de producción que puede poner ordenes
+- Equipment: Maquina,Equipo o molde
+- Order: Ordenes de mantenimiento 
+
+## Comandos Django
+url/admin
+
+### Ejecución del programa
+ ```bash
+ python manage.py runserver
+ ```
+
+### Actualizar base de datos
+ Cada vez que se quiere adicionar algo a lo que el cliente debe suplir o en cuanto a temas en los modelos se debe utilizar el comando para actualizar el servidor:
+ ```bash
+ python manage.py makemigrations
+ python manage.py migrate
+ # special case python manage.py migrate --run-syncdb
+ ```
+
+### Models
+Add class to models and in the 
+
+
+
+## Esquema
 1. Seleccionar Modulo de Producción o Mantenimiento
 2. Ingresar usuario de acuerdo a producción o mantenimiento
 
@@ -34,3 +67,9 @@
        - Estado de la orden (Abierta, Revisada, Cerrada)
        - Fecha y Hora de cierra de orden
        - Nombre de persona de producción a la que entrega equipo.
+
+
+caes70551987
+
+usuarios
+admin

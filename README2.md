@@ -16,7 +16,7 @@ python manage.py runserver
  python manage.py migrate
  ```
 
-5. para filtrar customers y hacer querys se tiene que hacer desde el cmd y dentro del primer eva1 con el siguiente comando y luego importar todos los modelos y customers se usa:
+5. para filtrar customers y hacer querys se tiene que hacer desde el cmd y dentro del primer src con el siguiente comando y luego importar todos los modelos y customers se usa:
 ```bash
 python manage.py shell
 ```

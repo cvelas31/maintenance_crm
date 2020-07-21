@@ -8,7 +8,7 @@
   }
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <img src="{% static 'images/logo.png' %}">
+    <img src="{% static 'images/logo.png' %}" width="150">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,18 +16,18 @@
       <ul class="navbar-nav">
         {% if request.user.is_staff %}
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'home' %}">Dashboard</a> 
+          <a class="nav-link" href="{% url 'home' %}">Tablero</a> 
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'products' %}">Products</a>
+          <a class="nav-link" href="{% url 'products' %}">Maquinas/Equipos</a>
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'account' %}">Settings</a> 
+          <a class="nav-link" href="{% url 'account' %}">Configuración</a> 
         </li>
         {% endif %}
       </ul>
     </div>
     <span class="hello-msg">Hello, {{request.user}}</span>
-    <span ><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+    <span ><a class="hello-msg" href="{% url 'logout' %}">Cerrar Sesión</a></span>
   </nav>
