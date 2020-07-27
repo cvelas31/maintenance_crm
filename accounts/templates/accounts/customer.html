@@ -17,10 +17,11 @@
 
 	<div class="col-md">
 		<div class="card card-body">
-			<h5>Contact Information</h5>
+			<h5>Información Personal</h5>
 			<hr>
 			<p>Email: {{customer.email}}</p>
 			<p>Phone: {{customer.phone}}</p>
+			<p>Area: {{customer.area}}</p>
 		</div>
 	</div>
 
@@ -40,7 +41,6 @@
 		<div class="card card-body">
 			<form method="get">
 				{{myFilter.form}}
-
 		    <button class="btn btn-primary" type="submit">Search</button>
 		  </form>
 		</div>
@@ -54,10 +54,10 @@
 		<div class="card card-body">
 			<table class="table table-sm">
 				<tr>
-					<th>Product</th>
-					<th>Note</th>
-					<th>Date Orderd</th>
-					<th>Status</th>
+					<th>Equipo</th>
+					<th>Descripción</th>
+					<th>Fecha de Creación</th>
+					<th>Estado</th>
 					<th>Update</th>
 					<th>Remove</th>
 				</tr>
@@ -65,8 +65,8 @@
 				{% for order in orders %}
 
 				<tr>
-					<td>{{order.product}}</td>
-					<td>{{order.note}}</td>
+					<td>{{order.equipo}}</td>
+					<td>{{order.descripción}}</td>
 					<td>{{order.date_created}}</td>
 					<td>{{order.status}}</td>
 					<td><a class="btn btn-sm btn-info" href= "{% url 'update_order' order.id %}">Update</a></td>

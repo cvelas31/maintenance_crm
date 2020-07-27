@@ -36,18 +36,18 @@
 		<h5>Ordenes de Mantenimiento</h5>
 		<hr>
 		<div class="card card-body">
+			<a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_order'%}">Crear Orden</a>
 			<table class="table table-sm">
 				<tr>
 					<th>Maquina/Equipo</th>
-					<th>Date Orderd</th>
-					<th>Status</th>
-					<th>Update</th>
+					<th>Fecha de creación</th>
+					<th>Estado</th>
+					<th>Actualizar</th>
 					<th>Remove</th>
 				</tr>
 				{% for order in orders %}
 					<tr>
-
-						<td>{{order.product}}</td>
+						<td>{{order.equipo}}</td>
 						<td>{{order.date_created}}</td>
 						<td>{{order.status}}</td>
 						<td><a class="btn btn-sm btn-info" href= "{% url 'update_order' order.id %}">Update</a></td>

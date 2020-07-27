@@ -7,13 +7,13 @@ urlpatterns = [
     path('logout/', views.logoutUser, name="logout"),
 
     path('account/', views.accountSettings, name="account"),
-    
+
     path('', views.home, name="home"),
     path('user/', views.userPage, name="user-page"),
-    path('products/', views.products, name='products'),
+    path('equipments/', views.equipments, name='equipments'),
     path('customer/<str:pk_test>/', views.customer, name="customer"),
-    
-    path('create_order/<str:pk>/', views.createOrder, name="create_order"),
+
+    path('create_order/', views.createOrder, name="create_order"),
     path('update_order/<str:pk>/', views.updateOrder, name="update_order"),
     path('delete_order/<str:pk>/', views.deleteOrder, name="delete_order"),
 ]

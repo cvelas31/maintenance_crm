@@ -7,11 +7,14 @@
 # Otros
 - producción1: ejemplo1
 - mantenimiento1: ejemplo1
+- producción2: ejemplo2
+- mantenimiento2: ejemplo2
 
 ## Nomenclatura:
 - Customer: Persona de producción que puede poner ordenes
 - Equipment: Maquina,Equipo o molde
-- Order: Ordenes de mantenimiento 
+- Order: Ordenes de mantenimiento
+- 
 
 ## Comandos Django
 url/admin
@@ -33,10 +36,44 @@ url/admin
  python manage.py migrate
  # special case python manage.py migrate --run-syncdb
  ```
+ Para resetear se borra todos los .py menos el `__init__.py`
 
 ### Models
-Add class to models and in the 
-
+Los modelos internos son los siguientes
+- Customer: 
+   - Se refiere a todas las personas que usan la aplicación (Los de producción)
+   - Los attributos son los siguientes:
+     - user: ID del customer
+     - name: Nombre del customer
+     - phone: Celular del customer
+     - email: Email
+     - profile_pic
+     - date_created
+- Representative: 
+   - Se refiere a todas las personas que usan la aplicación (Los de producción)
+   - Los attributos son los siguientes:
+     - user: ID del customer
+     - name: Nombre del customer
+     - phone: Celular del customer
+     - email: Email
+     - profile_pic
+     - date_created
+- Equipment:
+  - Se refiere a todos los equipos q hay molde/maquina
+  - Los attributos son:
+    - name
+    - category: Categoria Molde o Maquina
+    - description:
+    - date_created:
+    - tags: (TagsEquipment)
+- Order:
+  - Se refiere a todos los equipos q hay molde/maquina
+  - Los attributos son:
+    - customer: Quin puso la orden
+    - equipo: Que maquina es
+    - date_created:
+    - status: En revisión, Abierta, Cerrada
+    - order_tags: (TagsEquipment)
 
 
 ## Esquema
