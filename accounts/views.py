@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
-from .models import Customer, Equipment, Order
 from django.contrib.auth.forms import UserCreationForm
-from .forms import OrderForm, CreateUserForm, CustomerForm
 from django.forms import inlineformset_factory
-from .filters import OrderFilter
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+
+from .models import Customer, Equipment, Order
+from .forms import OrderForm, CreateUserForm, CustomerForm
+from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
 # Create your views here.
@@ -113,8 +114,6 @@ def equipments(request):
 def customer(request, pk_test):
     customer = Customer.objects.get(id=pk_test)
     orders = Order.objects.filter(customer=customer)
-
-    # orders = customer.order_set.all()
     order_count = orders.count()
 
     myFilter = OrderFilter(request.GET, queryset=orders)
@@ -127,43 +126,26 @@ def customer(request, pk_test):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
-def createOrder(request):
-    form = OrderForm()
+def createOrder(request, pk):
+    OrderFormSet = inlineformset_factory(Customer, Order, fk_name="customer",
+                                         fields=('equipo', 'status'), extra=10)
+    customer = Customer.objects.get(id=pk)
+    formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
     if request.method == "POST":
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
+        formset = OrderFormSet(request.POST, instance=customer)
+        if formset.is_valid():
+            formset.save()
             return redirect("/")
-    context = {"form": form}
-    # TODO: Fix input to get default value as the current customer
-    # print("PK:", pk)
-    # OrderFormSet = inlineformset_factory(Customer, Order, fk_name="customer",
-    #                                      fields=('equipo', 'status'), extra=10)
-    # print("OrderFormSet:", OrderFormSet)
-    # customer = Customer.objects.get(id=pk)
-    # print("Customer: ", customer)
-    # # form = OrderForm(initial={'customer': customer})
-    # formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-    # if request.method == 'POST':
-    #     # print('Printing POST', request.POST)
-    #     formset = OrderFormSet(request.POST, instance=customer)
-    #     if formset.is_valid():
-    #         formset.save()
-    #         return redirect('/')
-
-    # context = {'formset': formset}
+    context = {"formset": formset}
     return render(request, 'accounts/order_form.html', context)
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def updateOrder(request, pk):
-
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
-
     if request.method == 'POST':
-        # print('Printing POST', request.POST)
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()

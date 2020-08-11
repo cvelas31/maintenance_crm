@@ -1,5 +1,8 @@
 # Programa control mantenimiento
 
+# TODOs:
+- Customer == User in dashboard
+
 # Usuario
 ## Admin
 - admin: farmaplast2020
