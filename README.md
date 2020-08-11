@@ -17,7 +17,6 @@
 - Customer: Persona de producción que puede poner ordenes
 - Equipment: Maquina,Equipo o molde
 - Order: Ordenes de mantenimiento
-- 
 
 ## Comandos Django
 url/admin
@@ -40,6 +39,9 @@ url/admin
  # special case python manage.py migrate --run-syncdb
  ```
  Para resetear se borra todos los .py menos el `__init__.py`
+
+### Guardado de imagenes
+Las imagenes son guardadas de acuerdo al `settings.py` 
 
 ### Models
 Los modelos internos son los siguientes
@@ -113,8 +115,3 @@ Los modelos internos son los siguientes
        - Fecha y Hora de cierra de orden
        - Nombre de persona de producción a la que entrega equipo.
 
-
-caes70551987
-
-usuarios
-admin

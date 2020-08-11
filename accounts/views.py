@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
-from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -12,8 +11,6 @@ from .forms import OrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
-# Create your views here.
-
 
 @unauthenticated_user
 def registerPage(request):
@@ -23,7 +20,7 @@ def registerPage(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            group = Group.objects.get(name='customer')
+            group = Group.objects.get(name='produccion')
             user.groups.add(group)
             Customer.objects.create(user=user, name=user.username)
             messages.success(request, 'Account was created for ' + username)
@@ -74,9 +71,10 @@ def home(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
+@allowed_users(allowed_roles=['produccion', 'admin'])
 def userPage(request):
-    orders = request.user.customer.order_set.all()
+    customer = request.user.customer
+    orders = Order.objects.filter(customer=customer)
     opened = orders.filter(status='Abierta').count()
     on_revision = orders.filter(status='En revisión').count()
     closed = orders.filter(status='Cerrada').count()
@@ -87,7 +85,7 @@ def userPage(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
+@allowed_users(allowed_roles=['produccion', 'admin'])
 def accountSettings(request):
     customer = request.user.customer
     form = CustomerForm(instance=customer)
@@ -102,7 +100,7 @@ def accountSettings(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['mantenimiento', 'admin'])
 def equipments(request):
     equipment = Equipment.objects.all()
     # TODO: Add Tags to the visualizer
@@ -110,7 +108,7 @@ def equipments(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'produccion'])
 def customer(request, pk_test):
     customer = Customer.objects.get(id=pk_test)
     orders = Order.objects.filter(customer=customer)
@@ -119,13 +117,15 @@ def customer(request, pk_test):
     myFilter = OrderFilter(request.GET, queryset=orders)
     orders = myFilter.qs
 
-    context = {'customer': customer, 'orders': orders,
-               'order_count': order_count, 'myFilter': myFilter}
+    context = {'customer': customer,
+               'orders': orders,
+               'order_count': order_count,
+               'myFilter': myFilter}
     return render(request, 'accounts/customer.html', context)
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'produccion'])
 def createOrder(request, pk):
     OrderFormSet = inlineformset_factory(Customer, Order, fk_name="customer",
                                          fields=('equipo', 'status'), extra=10)
@@ -141,7 +141,7 @@ def createOrder(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+@allowed_users(allowed_roles=['admin', 'produccion'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
