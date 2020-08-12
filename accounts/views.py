@@ -18,11 +18,12 @@ def registerPage(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            form.save()
+            # user = form.save()
             username = form.cleaned_data.get('username')
-            group = Group.objects.get(name='produccion')
-            user.groups.add(group)
-            Customer.objects.create(user=user, name=user.username)
+            # group = Group.objects.get(name='produccion')
+            # user.groups.add(group)
+            # Customer.objects.create(user=user, name=user.username)
             messages.success(request, 'Account was created for ' + username)
 
             return redirect('login')
@@ -71,7 +72,7 @@ def home(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['produccion', 'admin'])
+@allowed_users(allowed_roles=['produccion'])
 def userPage(request):
     customer = request.user.customer
     orders = Order.objects.filter(customer=customer)
@@ -85,7 +86,7 @@ def userPage(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['produccion', 'admin'])
+@allowed_users(allowed_roles=['produccion', 'mantenimiento'])
 def accountSettings(request):
     customer = request.user.customer
     form = CustomerForm(instance=customer)
@@ -141,7 +142,7 @@ def createOrder(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin', 'produccion'])
+@allowed_users(allowed_roles=['admin', 'produccion', 'mantenimiento'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)

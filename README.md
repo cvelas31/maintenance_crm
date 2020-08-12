@@ -1,7 +1,16 @@
 # Programa control mantenimiento
 
 # TODOs:
-- Customer == User in dashboard
+- Customer == User in dashboard. DONE
+- Crear carta para nueva orden al lado izquierdo arriba (Color el q sea)
+- Registro default producción. Quitar de configuracion.
+- Quitar Area de los customers (Esta en grupos)
+- La parte de actualizar el status solo el admin lo puede hacer (Momentaneo)
+- Exportar a excel tambien la url del archivo (video, imagen, etc)
+- Quitar la parte de customers del main dashboard
+- Agregar descripcion y ultima modificación a cada.
+- Agregar dias abierta.
+- 
 
 # Usuario
 ## Admin
