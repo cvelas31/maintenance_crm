@@ -5,6 +5,7 @@ from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .models import Customer, Equipment, Order
 from .forms import CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm
@@ -62,11 +63,12 @@ def logoutUser(request):
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
+    non_closed_orders = orders.filter(Q(status='Abierta') | Q(status='En revisión'))
     opened = orders.filter(status='Abierta').count()
     on_revision = orders.filter(status='En revisión').count()
     closed = orders.filter(status='Cerrada').count()
 
-    context = {'orders': orders, 'customers': customers,
+    context = {'orders': non_closed_orders, 'customers': customers,
                'opened': opened, 'on_revision': on_revision, 'closed': closed}
     return render(request, 'accounts/dashboard.html', context)
 
@@ -81,7 +83,7 @@ def userPage(request):
     closed = orders.filter(status='Cerrada').count()
 
     context = {'orders': orders, 'opened': opened,
-               'on_revision': on_revision, 'closed': closed, 
+               'on_revision': on_revision, 'closed': closed,
                'customer': customer}
     return render(request, 'accounts/user.html', context)
 
