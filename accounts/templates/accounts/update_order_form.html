@@ -1,0 +1,47 @@
+{% extends 'accounts/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col">
+			<div class="card card-body">
+				<div class="d-flex justify-content-center">
+					<br>
+					<h3 id="form-title">Actualización de Orden</h3>
+				</div>
+
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="owner">Dueño de la orden</label>
+						{{form.customer}}
+					</div>
+					<div class="form-group">
+						<label for="titulo">Titulo</label>
+						{{form.title}}
+						
+					</div>
+					<div class="form-group">
+						<label for="equipo">Equipo</label>
+						{{form.equipo}}
+					</div>
+					<div class="form-group">
+						<label for="descripcion">Descripcion</label>
+						{{form.descripcion}}
+					</div>
+					<div class="form-group">
+						<label for="tags">Tags</label>
+						{{form.order_tags}}
+					</div>
+					<div class="form-group">
+						<label for="status">Status</label>
+						{{form.status}}
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -5,24 +5,35 @@
 <div class="row">
 	<div class="col-md">
 		<div class="card card-body">
+			<div class="row">
+				<div class="col">
+					<div class="d-flex justify-content-center">
+						<h2 id="form-title">Mis Ordenes</h2>
+					</div>
+				</div>
+			</div>
 			<table class="table table-sm">
 				<tr>
-					<th>Product</th>
-					<th>Note</th>
-					<th>Date Orderd</th>
-					<th>Status</th>
+					<th>Equipo</th>
+					<th>Titulo</th>
+					<th>Descripción</th>
+					<th>Fecha de Creacion</th>
+					<th>Estado</th>
+					<th colspan="2"><a class="btn btn-outline-info  btn-sm btn-block" href="{% url 'create_order' customer.id %}">
+						CREAR ORDEN</a></th>
 				</tr>
 
 				{% for order in orders %}
 
 				<tr>
-					<td>{{order.product}}</td>
-					<td>{{order.note}}</td>
+					<td>{{order.equipo}}</td>
+					<td>{{order.title}}</td>
+					<td>{{order.descripcion}}</td>
 					<td>{{order.date_created}}</td>
 					<td>{{order.status}}</td>
-					<td><a class="btn btn-sm btn-info" href= "{% url 'update_order' order.id %}">Update</a></td>
-					<td><a class="btn btn-sm btn-danger" href= "{% url 'delete_order' order.id %}">Delete</a></td>
-					
+					<td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Actualizar</a></td>
+					<td><a class="btn btn-sm btn-danger" href="{% url 'delete_order' order.id %}">Eliminar</a></td>
+
 				</tr>
 				{% endfor %}
 			</table>

@@ -67,12 +67,13 @@ class Order(models.Model):
     date_closed = models.DateTimeField(auto_now_add=False, null=True,
                                        blank=True)
     status = models.CharField(max_length=200, null=True, choices=STATUS)
-    descripción = models.CharField(max_length=1000, null=True)
+    title = models.CharField(max_length=200, null=True)
+    descripcion = models.CharField(max_length=1000, null=True)
     order_tags = models.ManyToManyField(TagOrder)
-    asigned_to = models.ForeignKey(
-        Customer, null=True, on_delete=models.SET_NULL, blank=True,
-        related_name='assigned_to')
-    # imagen = models.ImageField(default="profilepic.jpg", null=True, blank=True)
+    # asigned_to = models.ForeignKey(
+    #     Customer, null=True, on_delete=models.SET_NULL, blank=True,
+    #     related_name='assigned_to')
+    # imagen = models.ImageField(null=True, blank=True)
     # video = models.ImageField(default="profilepic.jpg", null=True, blank=True)
 
     def __str__(self):

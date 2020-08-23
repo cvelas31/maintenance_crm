@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import Customer, Equipment, Order
-from .forms import OrderForm, CreateUserForm, CustomerForm
+from .forms import CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -81,7 +81,8 @@ def userPage(request):
     closed = orders.filter(status='Cerrada').count()
 
     context = {'orders': orders, 'opened': opened,
-               'on_revision': on_revision, 'closed': closed}
+               'on_revision': on_revision, 'closed': closed, 
+               'customer': customer}
     return render(request, 'accounts/user.html', context)
 
 
@@ -128,31 +129,39 @@ def customer(request, pk_test):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin', 'produccion'])
 def createOrder(request, pk):
-    OrderFormSet = inlineformset_factory(Customer, Order, fk_name="customer",
-                                         fields=('equipo', 'status'), extra=10)
     customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
+    form = CreateOrderForm(initial={'customer': customer,
+                                    'status': 'Abierta'})
     if request.method == "POST":
-        formset = OrderFormSet(request.POST, instance=customer)
-        if formset.is_valid():
-            formset.save()
+        form = CreateOrderForm(request.POST, initial={'customer': customer,
+                                                      'status': 'Abierta'})
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.customer = customer
+            form.status = 'Abierta'
+            form.save()
             return redirect("/")
-    context = {"formset": formset}
-    return render(request, 'accounts/order_form.html', context)
+        else:
+            print("There is an error. Form is not valid")
+    context = {"form": form}
+    return render(request, 'accounts/create_order_form.html', context)
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin', 'produccion', 'mantenimiento'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
-    form = OrderForm(instance=order)
+    form = UpdateOrderForm(instance=order)
     if request.method == 'POST':
-        form = OrderForm(request.POST, instance=order)
+        form = UpdateOrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
             return redirect('/')
+        else:
+            print("There is an error. Form is not valid")
+
     context = {'form': form}
-    return render(request, 'accounts/order_form.html', context)
+    return render(request, 'accounts/update_order_form.html', context)
 
 
 @login_required(login_url='login')

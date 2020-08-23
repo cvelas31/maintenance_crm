@@ -1,9 +1,26 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
 from .models import Customer, Order
+
+
+class ReadOnlyFieldsMixin(object):
+    readonly_fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super(ReadOnlyFieldsMixin, self).__init__(*args, **kwargs)
+        for field in (field for name, field in self.fields.items() if name in self.readonly_fields):
+            field.widget.attrs['disabled'] = 'true'
+            field.required = False
+
+    def clean(self):
+        cleaned_data = super(ReadOnlyFieldsMixin, self).clean()
+        for field in self.readonly_fields:
+            cleaned_data[field] = getattr(self.instance, field)
+
+        return cleaned_data
 
 
 class CustomerForm(ModelForm):
@@ -13,10 +30,35 @@ class CustomerForm(ModelForm):
         exclude = ['user']
 
 
-class OrderForm(ModelForm):
+class CreateOrderForm(ModelForm):
     class Meta:
         model = Order
         fields = '__all__'
+        exclude = ['customer', 'status', 'date_closed']
+        widgets = {
+            'descripcion': Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateOrderForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
+class UpdateOrderForm(ReadOnlyFieldsMixin, ModelForm):
+    readonly_fields = ('customer', 'descripcion', 'title', 'equipo')
+
+    class Meta:
+        model = Order
+        fields = '__all__'
+        widgets = {
+            'descripcion': Textarea(attrs={'rows': 4, 'readonly': True}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateOrderForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 class CreateUserForm(UserCreationForm):
