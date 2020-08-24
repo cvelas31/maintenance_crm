@@ -15,6 +15,7 @@
 # Usuario
 ## Admin
 - admin: farmaplast2020
+- q12345678 psql
 
 # Otros
 - producción1: ejemplo1

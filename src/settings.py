@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+print("Base directory:", BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -123,12 +124,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/images/'
+MEDIA_URL = '/media_data/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')  # Change path to store images
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_data')  # Change path to store images
 
 # SMTP Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

@@ -18,6 +18,7 @@
 					<tr>
 						<th>Maquina/Equipo</th>
 						<th>Fecha de creación</th>
+						<th>Días abierta</th>
 						<th>Titulo</th>
 						<th>Estado</th>
 						<th>Actualizar</th>
@@ -27,6 +28,7 @@
 					<tr>
 						<td>{{order.equipo}}</td>
 						<td>{{order.date_created}}</td>
+						<td>{{orders.duration}}</td>
 						<td>{{order.title}}</td>
 						<td>{{order.status}}</td>
 						<td><a class="btn btn-sm btn-info" href="{% url 'update_order' order.id %}">Actualizar</a></td>

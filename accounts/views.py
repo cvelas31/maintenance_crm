@@ -5,7 +5,11 @@ from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Avg, F, Max, Min, Window, ExpressionWrapper, fields
+from django.utils import timezone
+from django.db.models.functions import Now, Extract
+from datetime import datetime
+
 
 from .models import Customer, Equipment, Order
 from .forms import CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm
@@ -68,8 +72,16 @@ def home(request):
     on_revision = orders.filter(status='En revisión').count()
     closed = orders.filter(status='Cerrada').count()
 
+    duration = ExpressionWrapper(Now() - F('date_created'),
+                                 output_field=fields.DurationField())
+    non_closed_orders = non_closed_orders.annotate(duration=duration)
+    non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
+    for orde in non_closed_orders.values():
+        print(orde)
+
     context = {'orders': non_closed_orders, 'customers': customers,
-               'opened': opened, 'on_revision': on_revision, 'closed': closed}
+               'opened': opened, 'on_revision': on_revision,
+               'closed': closed, 'to_date': datetime.now()}
     return render(request, 'accounts/dashboard.html', context)
 
 

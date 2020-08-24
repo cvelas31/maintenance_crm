@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class Customer(models.Model):
@@ -79,3 +80,11 @@ class Order(models.Model):
     def __str__(self):
         date = self.date_created.strftime("%Y/%m/%d")
         return f"{str(self.equipo)}-{date}"
+
+
+class Images(models.Model):
+    order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
+
+    def __str__(self):
+        return self.id
