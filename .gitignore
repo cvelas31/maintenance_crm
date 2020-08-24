@@ -1,3 +1,7 @@
+# Personal
+media_data/*.jpg
+media_data/*.mp4
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
