@@ -10,12 +10,15 @@
 - Quitar la parte de customers del main dashboard
 - Agregar descripcion y ultima modificación a cada.
 - Agregar dias abierta.
-- 
+- Agregar assigned to
 
 # Usuario
 ## Admin
 - admin: farmaplast2020
 - q12345678 psql 
+
+## Actualizar con CSS
+Ctrl + F5
 
 # Otros
 - producción1: ejemplo1

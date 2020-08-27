@@ -72,10 +72,10 @@ def home(request):
     on_revision = orders.filter(status='En revisión').count()
     closed = orders.filter(status='Cerrada').count()
 
-    duration = ExpressionWrapper(Now() - F('date_created'),
-                                 output_field=fields.DurationField())
-    non_closed_orders = non_closed_orders.annotate(duration=duration)
-    non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
+    #duration = ExpressionWrapper(Now() - F('date_created'),
+    #                             output_field=fields.DurationField())
+    #non_closed_orders = non_closed_orders.annotate(duration=duration)
+    #non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
     for orde in non_closed_orders.values():
         print(orde)
 
