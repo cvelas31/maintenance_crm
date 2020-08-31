@@ -32,7 +32,6 @@ def admin_only(view_func):
         group = None
         if request.user.groups.exists():
             group = request.user.groups.all()[0].name
-            print("Group: ", group)
         if group == 'produccion':
             return redirect('user-page')
         if group in ['admin', 'mantenimiento']:
