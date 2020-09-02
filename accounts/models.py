@@ -84,7 +84,15 @@ class Order(models.Model):
 
 class Images(models.Model):
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to='images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
-        return self.id
+        return self.order.id + self.image
+
+
+class Videos(models.Model):
+    order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
+    video = models.FileField(upload_to='videos/%Y/%m/%d/', null=True, blank=True)
+
+    def __str__(self):
+        return self.order.id + self.video

@@ -11,8 +11,9 @@ from django.db.models.functions import Now, Extract
 from datetime import datetime
 
 
-from .models import Customer, Equipment, Order
-from .forms import CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm
+from .models import Customer, Equipment, Order, Images, Videos
+from .forms import (CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm,
+                    UpdateImageForm, UpdateVideoForm)
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -144,18 +145,31 @@ def createOrder(request, pk):
     customer = Customer.objects.get(id=pk)
     form = CreateOrderForm(initial={'customer': customer,
                                     'status': 'Abierta'})
+    form_image = UpdateImageForm()
+    form_video = UpdateVideoForm()
     if request.method == "POST":
         form = CreateOrderForm(request.POST, initial={'customer': customer,
                                                       'status': 'Abierta'})
+        form_image = UpdateImageForm(request.POST, request.FILES)
+        form_video = UpdateVideoForm(request.POST, request.FILES)
         if form.is_valid():
             form = form.save(commit=False)
             form.customer = customer
             form.status = 'Abierta'
             form.save()
+            order = Order.objects.get(id=form.pk)
+            if form_image.is_valid():
+                for img in request.FILES.getlist('images'):
+                    Images.objects.create(order=order, image=img)
+            if form_video.is_valid():
+                for vid in request.FILES.getlist('videos'):
+                    Videos.objects.create(order=order, video=vid)
             return redirect("/")
         else:
             print("There is an error. Form is not valid")
-    context = {"form": form}
+    context = {'form': form,
+               'form_image': form_image,
+               'form_video': form_video}
     return render(request, 'accounts/create_order_form.html', context)
 
 

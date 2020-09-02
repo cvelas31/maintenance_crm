@@ -1,21 +1,36 @@
 # Programa control mantenimiento
 
 # TODOs:
-- Customer == User in dashboard. DONE
-- Crear carta para nueva orden al lado izquierdo arriba (Color el q sea)
-- Registro default producción. Quitar de configuracion.
 - Quitar Area de los customers (Esta en grupos)
 - La parte de actualizar el status solo el admin lo puede hacer (Momentaneo)
 - Exportar a excel tambien la url del archivo (video, imagen, etc)
-- Quitar la parte de customers del main dashboard
 - Agregar descripcion y ultima modificación a cada.
-- Agregar dias abierta.
 - Agregar assigned to
+- Modelo de Imagenes
+  - ForeignKey Orden
+  - Imagen (URL)
+  - media_data/imagenes/%Y/%m/%d/nombre.png
+  - Opcionales:
+    - Bajarle resolución
+    - Hashear (Cambiar nombre y evitar colisiones)
+- Añadirlo al form de Actualizar y al de Crear.
+- Modelo de videos
+  - ForeignKey Orden
+  - Imagen (URL)
+  - media_data/imagenes/%Y/%m/%d/nombre.png
+  - Opcionales:
+    - Bajarle resolución
+    - Hashear (Cambiar nombre y evitar colisiones)
+- Añadirlo al form de Actualizar y al de Crear.
 
 # Usuario
 ## Admin
 - admin: farmaplast2020
-- q12345678 psql 
+- q12345678 psql
+- Al iniciar Postgres. Hay q crear los grupos:
+  - mantenimiento
+  - produccion
+  - admin
 
 ## Actualizar con CSS
 Ctrl + F5

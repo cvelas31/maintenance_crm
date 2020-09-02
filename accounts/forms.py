@@ -45,6 +45,27 @@ class CreateOrderForm(ModelForm):
             visible.field.widget.attrs['class'] = 'form-control'
 
 
+class UpdateImageForm(forms.Form):
+    images = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True,
+                                                                    "accept": 'image/*'}))
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateImageForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
+class UpdateVideoForm(forms.Form):
+    videos = forms.FileField(widget=forms.ClearableFileInput(
+        attrs={
+            "accept": 'video/*'}))
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateVideoForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
 class UpdateOrderForm(ReadOnlyFieldsMixin, ModelForm):
     readonly_fields = ('customer', 'descripcion', 'title', 'equipo')
 

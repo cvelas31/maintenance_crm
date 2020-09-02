@@ -1,6 +1,6 @@
 # Personal
-media_data/*.jpg
-media_data/*.mp4
+media_data/*
+!media_data/.keep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
