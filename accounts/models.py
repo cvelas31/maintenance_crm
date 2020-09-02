@@ -87,7 +87,7 @@ class Images(models.Model):
     image = models.ImageField(upload_to='images/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
-        return self.order.id + self.image
+        return str(self.image)
 
 
 class Videos(models.Model):
@@ -95,4 +95,4 @@ class Videos(models.Model):
     video = models.FileField(upload_to='videos/%Y/%m/%d/', null=True, blank=True)
 
     def __str__(self):
-        return self.order.id + self.video
+        return str(self.video)

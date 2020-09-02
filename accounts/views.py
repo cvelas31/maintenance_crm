@@ -178,6 +178,8 @@ def createOrder(request, pk):
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = UpdateOrderForm(instance=order)
+    order_images = Images.objects.filter(order=order).values_list('image').values
+    order_videos = Videos.objects.filter(order=order).values_list('video').values
     if request.method == 'POST':
         form = UpdateOrderForm(request.POST, instance=order)
         if form.is_valid():
@@ -185,8 +187,12 @@ def updateOrder(request, pk):
             return redirect('/')
         else:
             print("There is an error. Form is not valid")
-
-    context = {'form': form}
+    print('order_images', order_images)
+    print('order_videos', order_videos)
+    context = {'form': form,
+               'order_images': order_images,
+               'order_videos': order_videos
+               }
     return render(request, 'accounts/update_order_form.html', context)
 
 
