@@ -22,6 +22,7 @@
     - Bajarle resolución
     - Hashear (Cambiar nombre y evitar colisiones)
 - Añadirlo al form de Actualizar y al de Crear.
+- https://stackoverflow.com/questions/60754900/connectionreseterror-while-playing-a-video-file-over-django-with-filefield-and
 
 # Usuario
 ## Admin

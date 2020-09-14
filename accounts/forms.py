@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Customer, Order
+from .models import Customer, Order, OrderComments
 
 
 class ReadOnlyFieldsMixin(object):
@@ -51,6 +51,7 @@ class UpdateImageForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(UpdateImageForm, self).__init__(*args, **kwargs)
+        self.fields['images'].required = False
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
@@ -62,12 +63,13 @@ class UpdateVideoForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(UpdateVideoForm, self).__init__(*args, **kwargs)
+        self.fields['videos'].required = False
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
 
 class UpdateOrderForm(ReadOnlyFieldsMixin, ModelForm):
-    readonly_fields = ('customer', 'descripcion', 'title', 'equipo')
+    readonly_fields = ('customer', 'descripcion', 'title', 'equipo', 'order_tags')
 
     class Meta:
         model = Order
@@ -86,3 +88,18 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+class CreateOrderCommentForm(ModelForm):
+    class Meta:
+        model = OrderComments
+        fields = '__all__'
+        exclude = ['order', 'author', 'date_created']
+        widgets = {
+            'descripcion': Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateOrderCommentForm, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'

@@ -82,6 +82,18 @@ class Order(models.Model):
         return f"{str(self.equipo)}-{date}"
 
 
+class OrderComments(models.Model):
+    order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
+    author = models.ForeignKey(Customer, null=True,
+                               on_delete=models.SET_NULL)
+    descripcion = models.CharField(max_length=1000, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        date = self.date_created.strftime("%Y/%m/%d")
+        return f"{str(self.order)}-{date}"
+
+
 class Images(models.Model):
     order = models.ForeignKey(Order, null=False, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/%Y/%m/%d/', null=True, blank=True)

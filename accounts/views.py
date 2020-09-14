@@ -11,9 +11,9 @@ from django.db.models.functions import Now, Extract
 from datetime import datetime
 
 
-from .models import Customer, Equipment, Order, Images, Videos
+from .models import Customer, Equipment, Order, Images, Videos, OrderComments
 from .forms import (CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm,
-                    UpdateImageForm, UpdateVideoForm)
+                    UpdateImageForm, UpdateVideoForm, CreateOrderCommentForm)
 from .filters import OrderFilter
 from .decorators import unauthenticated_user, allowed_users, admin_only
 
@@ -176,22 +176,55 @@ def createOrder(request, pk):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin', 'produccion', 'mantenimiento'])
 def updateOrder(request, pk):
+    customer = request.user.customer
     order = Order.objects.get(id=pk)
     form = UpdateOrderForm(instance=order)
+    form_comment = CreateOrderCommentForm(initial={'order': order,
+                                                   'customer': customer})
     order_images = Images.objects.filter(order=order).values_list('image').values
     order_videos = Videos.objects.filter(order=order).values_list('video').values
+    form_image = UpdateImageForm()
+    form_video = UpdateVideoForm()
+    order_comments = OrderComments.objects.filter(order=order)
+    dict_comments = []
+    for comment in order_comments:
+        curr_customer = Customer.objects.get(id=comment.author_id)
+        dict_comments.append({'author': curr_customer.name,
+                              'fecha': comment.date_created,
+                              'description': comment.descripcion})
     if request.method == 'POST':
         form = UpdateOrderForm(request.POST, instance=order)
+        form_comment = CreateOrderCommentForm(request.POST,
+                                              initial={'order': order,
+                                                       'author': customer})
+        form_image = UpdateImageForm(request.POST, request.FILES)
+        form_video = UpdateVideoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            form = form.save(commit=False)
+            if form.status == "Cerrada":
+                form.date_closed = timezone.now()
+            if form_comment.is_valid():
+                form_comment = form_comment.save(commit=False)
+                form_comment.order = order
+                form_comment.author = customer
+                if form_image.is_valid():
+                    for img in request.FILES.getlist('images'):
+                        Images.objects.create(order=order, image=img)
+                if form_video.is_valid():
+                    for vid in request.FILES.getlist('videos'):
+                        Videos.objects.create(order=order, video=vid)
+                form.save()
+                form_comment.save()
             return redirect('/')
         else:
             print("There is an error. Form is not valid")
-    print('order_images', order_images)
-    print('order_videos', order_videos)
     context = {'form': form,
+               'form_comment': form_comment,
                'order_images': order_images,
-               'order_videos': order_videos
+               'order_videos': order_videos,
+               'dict_comments': dict_comments,
+               'form_image': form_image,
+               'form_video': form_video,
                }
     return render(request, 'accounts/update_order_form.html', context)
 
