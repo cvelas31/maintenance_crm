@@ -18,13 +18,62 @@ body{
 }
 
 .carousel {
-    height: 500px;
-    width: 500px;
+    height: 100%;
+    width: 80%;
+    align-content: center;
+    background-color: rgb(209, 208, 208);
+}
+
+.carousel-indicators {
+    margin-bottom: 8px;
+}
+
+.carousel-indicators>li {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+.carousel-inner {
+    max-height: 100%;
+    max-width: 100%;
+    margin: auto;
+}
+
+.carousel-item {
+    text-align: center;
+    height: 100%; 
+    width: 100%; 
+}
+
+.parent {
+    min-height: 200px;
 }
 
 .carousel-item img {
-    max-height: 500px; /* input your desired height here */
+    height: 100%; 
+    width: 100%; 
+    display: block;
+}
+
+/* .carousel {
+    height: 500px;
+    width: 500px;
+    background-color: rgb(209, 208, 208);
+}
+
+.carousel-inner {
+    margin: auto;
+}
+
+.carousel-item img {
+    height: 100%; 
+    width: 100%; 
+    margin: auto;
   }
+ */
+
+
 
 .video-disp {
     height: 500px;

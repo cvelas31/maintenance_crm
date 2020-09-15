@@ -118,8 +118,26 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['mantenimiento', 'admin'])
 def equipments(request):
     equipment = Equipment.objects.all()
-    # TODO: Add Tags to the visualizer
     return render(request, 'accounts/equipment.html', {'equipment': equipment})
+
+
+@login_required(login_url='login')
+@admin_only
+def orders(request):
+    orders = Order.objects.all()
+    order_count = orders.count()
+
+    myFilter = OrderFilter(request.GET, queryset=orders)
+    orders = myFilter.qs
+    duration = ExpressionWrapper(Now() - F('date_created'),
+                                 output_field=fields.DurationField())
+    non_closed_orders = orders.annotate(duration=duration)
+    non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
+
+    context = {'orders': non_closed_orders,
+               'order_count': order_count,
+               'myFilter': myFilter}
+    return render(request, 'accounts/customer.html', context)
 
 
 @login_required(login_url='login')
