@@ -124,7 +124,9 @@ TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
+
+DATETIME_FORMAT = 'm/d/y P'
 
 USE_TZ = True
 
