@@ -1,5 +1,11 @@
 # Programa control mantenimiento
 
+# SETUP
+```bash
+cd C:\Users\EQ01\Documents\Github\maintenance_crm
+conda activate django
+python manage.py runserver 0.0.0.0:8000
+```
 # TODOs:
 - Quitar Area de los customers (Esta en grupos)
 - La parte de actualizar el status solo el admin lo puede hacer (Momentaneo)

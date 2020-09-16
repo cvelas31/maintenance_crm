@@ -78,7 +78,10 @@ class Order(models.Model):
     # video = models.ImageField(default="profilepic.jpg", null=True, blank=True)
 
     def __str__(self):
-        date = self.date_created.strftime("%Y/%m/%d")
+        if self.date_created:
+            date = self.date_created.strftime("%Y/%m/%d")
+        else:
+            date = "Any"
         return f"{str(self.equipo)}-{date}"
 
 

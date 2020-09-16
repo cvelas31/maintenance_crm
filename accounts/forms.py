@@ -19,7 +19,6 @@ class ReadOnlyFieldsMixin(object):
         cleaned_data = super(ReadOnlyFieldsMixin, self).clean()
         for field in self.readonly_fields:
             cleaned_data[field] = getattr(self.instance, field)
-
         return cleaned_data
 
 
@@ -69,7 +68,7 @@ class UpdateVideoForm(forms.Form):
 
 
 class UpdateOrderForm(ReadOnlyFieldsMixin, ModelForm):
-    readonly_fields = ('customer', 'descripcion', 'title', 'equipo', 'order_tags')
+    readonly_fields = ('customer', 'descripcion', 'title', 'equipo')
 
     class Meta:
         model = Order

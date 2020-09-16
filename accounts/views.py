@@ -5,7 +5,7 @@ from django.forms import inlineformset_factory
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Avg, F, Max, Min, Window, ExpressionWrapper, fields
+from django.db.models import Q, F, ExpressionWrapper, fields
 from django.utils import timezone
 from django.db.models.functions import Now, Extract
 from datetime import datetime
@@ -115,7 +115,7 @@ def accountSettings(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['mantenimiento', 'admin'])
+@allowed_users(allowed_roles=['mantenimiento', 'admin', 'produccion'])
 def equipments(request):
     equipment = Equipment.objects.all()
     return render(request, 'accounts/equipment.html', {'equipment': equipment})
@@ -171,11 +171,12 @@ def createOrder(request, pk):
         form_image = UpdateImageForm(request.POST, request.FILES)
         form_video = UpdateVideoForm(request.POST, request.FILES)
         if form.is_valid():
-            form = form.save(commit=False)
-            form.customer = customer
-            form.status = 'Abierta'
-            form.save()
-            order = Order.objects.get(id=form.pk)
+            new_order = form.save(commit=False)
+            new_order.customer = customer
+            new_order.status = 'Abierta'
+            new_order.save()
+            form.save_m2m()
+            order = Order.objects.get(id=new_order.pk)
             if form_image.is_valid():
                 for img in request.FILES.getlist('images'):
                     Images.objects.create(order=order, image=img)
@@ -218,7 +219,7 @@ def updateOrder(request, pk):
         form_image = UpdateImageForm(request.POST, request.FILES)
         form_video = UpdateVideoForm(request.POST, request.FILES)
         if form.is_valid():
-            form = form.save(commit=False)
+            existing_order = form.save(commit=False)
             if form.status == "Cerrada":
                 form.date_closed = timezone.now()
             if form_comment.is_valid():
@@ -231,7 +232,8 @@ def updateOrder(request, pk):
                 if form_video.is_valid():
                     for vid in request.FILES.getlist('videos'):
                         Videos.objects.create(order=order, video=vid)
-                form.save()
+                existing_order.save()
+                form.save_m2m()
                 form_comment.save()
             return redirect('/')
         else:
