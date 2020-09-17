@@ -27,6 +27,8 @@ SECRET_KEY = 'l&pz=9&(x1@&g^8q=is%=u#i2r!pkept2d)_@&4@$(ba6f4#6%'
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost"]
+=======
+>>>>>>> Stashed changes
 
 
 # Application definition
@@ -87,9 +89,7 @@ WSGI_APPLICATION = 'src.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'demo_test',
         'USER': 'postgres',
-        'PASSWORD': 'q12345678',
         'HOST': 'localhost',
         'PORT': 5432,
     }
