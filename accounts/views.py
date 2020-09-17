@@ -220,8 +220,8 @@ def updateOrder(request, pk):
         form_video = UpdateVideoForm(request.POST, request.FILES)
         if form.is_valid():
             existing_order = form.save(commit=False)
-            if form.status == "Cerrada":
-                form.date_closed = timezone.now()
+            if existing_order.status == "Cerrada":
+                existing_order.date_closed = timezone.now()
             if form_comment.is_valid():
                 form_comment = form_comment.save(commit=False)
                 form_comment.order = order
