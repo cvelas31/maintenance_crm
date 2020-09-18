@@ -40,6 +40,7 @@ class CreateOrderForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateOrderForm, self).__init__(*args, **kwargs)
+        self.fields['equipo'].queryset = self.fields['equipo'].queryset.order_by('name')
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
@@ -79,6 +80,7 @@ class UpdateOrderForm(ReadOnlyFieldsMixin, ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UpdateOrderForm, self).__init__(*args, **kwargs)
+        self.fields['equipo'].queryset = self.fields['equipo'].queryset.order_by('name')
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 

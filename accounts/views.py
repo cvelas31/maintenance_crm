@@ -77,6 +77,7 @@ def home(request):
                                  output_field=fields.DurationField())
     non_closed_orders = non_closed_orders.annotate(duration=duration)
     non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
+    non_closed_orders = non_closed_orders.order_by("date_created")
 
     context = {'orders': non_closed_orders, 'customers': customers,
                'opened': opened, 'on_revision': on_revision,
@@ -92,6 +93,8 @@ def userPage(request):
     opened = orders.filter(status='Abierta').count()
     on_revision = orders.filter(status='En revisión').count()
     closed = orders.filter(status='Cerrada').count()
+    orders = orders.filter(Q(status='Abierta') | Q(status='En revisión'))
+    orders = orders.order_by("-date_created")
 
     context = {'orders': orders, 'opened': opened,
                'on_revision': on_revision, 'closed': closed,
@@ -118,6 +121,7 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['mantenimiento', 'admin', 'produccion'])
 def equipments(request):
     equipment = Equipment.objects.all()
+    equipment = equipment.order_by("name")
     return render(request, 'accounts/equipment.html', {'equipment': equipment})
 
 
