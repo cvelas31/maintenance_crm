@@ -8,6 +8,8 @@ urlpatterns = [
     path('login/', views.loginPage, name="login"),
     path('logout/', views.logoutUser, name="logout"),
 
+    path('upload_equipment/', views.uploadEquipmentCSV, name="upload_equipment"),
+
     path('account/', views.accountSettings, name="account"),
 
     path('', views.home, name="home"),

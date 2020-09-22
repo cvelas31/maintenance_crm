@@ -9,7 +9,7 @@ from django.db.models import Q, F, ExpressionWrapper, fields
 from django.utils import timezone
 from django.db.models.functions import Now, Extract
 from datetime import datetime
-
+import pandas as pd
 
 from .models import Customer, Equipment, Order, Images, Videos, OrderComments
 from .forms import (CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm,
@@ -262,3 +262,28 @@ def deleteOrder(request, pk):
         return redirect('/')
     context = {'item': order}
     return render(request, 'accounts/delete.html', context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def uploadEquipmentCSV(request):
+    context = {"equipment": "Equipment must have Name, Category columns"}
+    if request.method == "GET":
+        return render(request, 'accounts/upload_equipment.html', context)
+
+    csv_file = request.FILES["file"]
+    if csv_file.name.endswith(".csv"):
+        df = pd.read_csv(csv_file)
+        new_equipment = []
+        for _, row in df.iterrows():
+            new_equipment.append(
+                Equipment(
+                    name=row['Name'],
+                    category=row['Category'],
+                    date_created=timezone.now(),
+                )
+            )
+        Equipment.objects.bulk_create(new_equipment)
+    else:
+        messages.error(request, "This is not a csv file")
+    return render(request, 'accounts/upload_equipment.html', context)

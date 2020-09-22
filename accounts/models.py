@@ -34,13 +34,14 @@ class Equipment(models.Model):
     CATEGORY = (
         ('Molde', 'Molde'),
         ('Maquina', 'Maquina'),
+        ('Periferico', 'Periferico'),
     )
 
     name = models.CharField(max_length=200, null=True)
     category = models.CharField(max_length=200, null=True, choices=CATEGORY)
     description = models.CharField(max_length=200, null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-    tags = models.ManyToManyField(TagEquipment)
+    tags = models.ManyToManyField(TagEquipment, blank=True)
 
     def __str__(self):
         return self.name
