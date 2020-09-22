@@ -6,6 +6,18 @@ cd C:\Users\EQ01\Documents\Github\maintenance_crm
 conda activate django
 python manage.py runserver 0.0.0.0:8000
 ```
+
+# Database Backup and Loaddata
+- To dump database use 
+```bash
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
+```
+- To load data: Ensure that coding is in utf-8. Convert if necessary.
+```bash
+python loaddata db.json
+```
+
+
 # TODOs:
 - Quitar Area de los customers (Esta en grupos)
 - La parte de actualizar el status solo el admin lo puede hacer (Momentaneo)
