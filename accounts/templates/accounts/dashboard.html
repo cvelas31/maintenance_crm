@@ -16,6 +16,7 @@
 			<div class="card card-body justify-center">
 				<table class="table table-sm">
 					<tr>
+						<th>ID</th>
 						<th>Maquina/Equipo</th>
 						<th>Fecha de creación</th>
 						<th>Días abierta</th>
@@ -26,6 +27,7 @@
 					</tr>
 					{% for order in orders %}
 					<tr>
+						<td>{{order.id}}</td>
 						<td>{{order.equipo}}</td>
 						<td>{{order.date_created}}</td>
 						<td>{{order.duration_days}}</td>

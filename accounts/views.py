@@ -11,7 +11,7 @@ from django.db.models.functions import Now, Extract
 from datetime import datetime
 import pandas as pd
 
-from .models import Customer, Equipment, Order, Images, Videos, OrderComments
+from .models import Customer, Equipment, Order, Images, Videos, OrderComments, TagOrder
 from .forms import (CreateOrderForm, UpdateOrderForm, CreateUserForm, CustomerForm,
                     UpdateImageForm, UpdateVideoForm, CreateOrderCommentForm)
 from .filters import OrderFilter
@@ -79,6 +79,10 @@ def home(request):
     non_closed_orders = non_closed_orders.annotate(duration_days=Extract('duration', 'day'))
     non_closed_orders = non_closed_orders.order_by("date_created")
 
+    if request.user.group == "taller":
+        taller_tag = TagOrder.objects.get(name="taller")
+        non_closed_orders = non_closed_orders.filter(order_tags=taller_tag)
+
     context = {'orders': non_closed_orders, 'customers': customers,
                'opened': opened, 'on_revision': on_revision,
                'closed': closed, 'to_date': datetime.now()}
@@ -95,7 +99,6 @@ def userPage(request):
     closed = orders.filter(status='Cerrada').count()
     orders = orders.filter(Q(status='Abierta') | Q(status='En revisión'))
     orders = orders.order_by("-date_created")
-
     context = {'orders': orders, 'opened': opened,
                'on_revision': on_revision, 'closed': closed,
                'customer': customer}
@@ -103,7 +106,7 @@ def userPage(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['produccion', 'mantenimiento'])
+@allowed_users(allowed_roles=['produccion', 'mantenimiento', 'taller'])
 def accountSettings(request):
     customer = request.user.customer
     form = CustomerForm(instance=customer)
@@ -197,7 +200,7 @@ def createOrder(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin', 'produccion', 'mantenimiento'])
+@allowed_users(allowed_roles=['admin', 'produccion', 'mantenimiento', 'taller'])
 def updateOrder(request, pk):
     customer = request.user.customer
     order = Order.objects.get(id=pk)
