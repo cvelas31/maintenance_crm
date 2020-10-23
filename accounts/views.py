@@ -69,9 +69,6 @@ def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
     non_closed_orders = orders.filter(Q(status='Abierta') | Q(status='En revisión'))
-    opened = orders.filter(status='Abierta').count()
-    on_revision = orders.filter(status='En revisión').count()
-    closed = orders.filter(status='Cerrada').count()
 
     duration = ExpressionWrapper(Now() - F('date_created'),
                                  output_field=fields.DurationField())
@@ -82,6 +79,14 @@ def home(request):
     if request.user.group == "taller":
         taller_tag = TagOrder.objects.get(name="taller")
         non_closed_orders = non_closed_orders.filter(order_tags=taller_tag)
+        taller_orders = orders.filter(order_tags=taller_tag)
+        opened = taller_orders.filter(status='Abierta').count()
+        on_revision = taller_orders.filter(status='En revisión').count()
+        closed = taller_orders.filter(status='Cerrada').count()
+    else:
+        opened = orders.filter(status='Abierta').count()
+        on_revision = orders.filter(status='En revisión').count()
+        closed = orders.filter(status='Cerrada').count()
 
     context = {'orders': non_closed_orders, 'customers': customers,
                'opened': opened, 'on_revision': on_revision,
