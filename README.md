@@ -6,29 +6,55 @@ cd C:\Users\EQ01\Documents\Github\maintenance_crm
 conda activate django
 python manage.py runserver 0.0.0.0:8000
 ```
+
+# Database Backup and Loaddata
+TODO: This is not working properly to load data from nothing.
+- Findings:
+  - Cuando uno crea un supeeruser sale el issue de los grupos, de q tienen q existir desde antes
+  - Con el issue de los customer, vemos q el id ya estaba incrementado y no empezaba desde 1. Habria q resetearlo completamente o como hacemos para q el Postgres quede con la data original y sus keys.
+- Hyphotesis:
+  - Order data
+  - Foreign Key problems as table doesn't already exist
+  - Use other libraries to dump and load data in a better format (https://github.com/davedash/django-fixture-magic)
+  - In the original computer it worked but we only changed a single model. insert all models may have some additional issues.
+  - Probar si subiendo todo a Postgres desde un CSV podria funcionar haciendo un INSERT en BATCH.
+
+Dump data may be coded in ANSI, convert it to UTF-8 in Notepad.
+
+- To dump database without auth permisson and without contenttypes 
+```bash
+python manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json
+```
+- To dump data on natural way
+```bash
+python manage.py dumpdata --natural
+```
+- To load data: Ensure that coding is in utf-8. Convert if necessary.
+```bash
+python manage.py loaddata db.json
+```
+
+
 # TODOs:
-- Quitar Area de los customers (Esta en grupos)
+- En admin mostrar las ordenes cerradas con la fecha de cerrado, o añadirle una pestaña en la fecha de la ultima actualización.
+- Mostrar un id de cada orden
+- Usuario Taller, que solo vea las ot q tengan tag taller si es posible.
+- Usuarios de mantenimiento tengan la opción de buscar las ordenes como lo hace el admin. pero no de eliminar
+- Dias ultima modificación (Cerrada)
+- Asignar a una persona (ver si solo esa persoan la puede ver o q)
+- BackUp - De la base de datos de postgres
+- 
+- Servidor usando docker, gunicorn y nginx para manejo de cargas
 - La parte de actualizar el status solo el admin lo puede hacer (Momentaneo)
-- Exportar a excel tambien la url del archivo (video, imagen, etc)
-- Agregar descripcion y ultima modificación a cada.
-- Agregar assigned to
+- Letra más grande en general
+- Script para poder hacer analitica de las ordenes
+- Agregar quien hizo ultima modificación y cuando a cada orden en tabla.
+- Agregar ID de la orden para poderlo ver y hacerle tracking más fácil
 - Modelo de Imagenes
-  - ForeignKey Orden
-  - Imagen (URL)
-  - media_data/imagenes/%Y/%m/%d/nombre.png
   - Opcionales:
     - Bajarle resolución
-    - Hashear (Cambiar nombre y evitar colisiones)
-- Añadirlo al form de Actualizar y al de Crear.
 - Modelo de videos
-  - ForeignKey Orden
-  - Imagen (URL)
-  - media_data/imagenes/%Y/%m/%d/nombre.png
-  - Opcionales:
     - Bajarle resolución
-    - Hashear (Cambiar nombre y evitar colisiones)
-- Añadirlo al form de Actualizar y al de Crear.
-- https://stackoverflow.com/questions/60754900/connectionreseterror-while-playing-a-video-file-over-django-with-filefield-and
 
 # Usuario
 ## Admin

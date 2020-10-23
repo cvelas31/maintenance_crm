@@ -14,6 +14,7 @@
 			</div>
 			<table class="table table-sm">
 				<tr>
+					<th>ID</th>
 					<th>Equipo</th>
 					<th>Titulo</th>
 					<th>Descripción</th>
@@ -26,6 +27,7 @@
 				{% for order in orders %}
 
 				<tr>
+					<td>{{order.id}}</td>
 					<td>{{order.equipo}}</td>
 					<td>{{order.title}}</td>
 					<td>{{order.descripcion}}</td>
